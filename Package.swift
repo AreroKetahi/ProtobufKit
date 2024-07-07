@@ -20,6 +20,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax.git", from: "600.0.0-latest"),
+        .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.26.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -34,7 +35,13 @@ let package = Package(
         ),
 
         // Library that exposes a macro as part of its API, which is used in client programs.
-        .target(name: "ProtobufKit", dependencies: ["ProtobufKitMacros"]),
+        .target(
+            name: "ProtobufKit", 
+            dependencies: [
+                "ProtobufKitMacros",
+                .product(name: "SwiftProtobuf", package: "swift-protobuf")
+            ]
+        ),
 
         // A client of the library, which is able to use the macro in its own code.
         .executableTarget(name: "ProtobufKitClient", dependencies: ["ProtobufKit"]),
