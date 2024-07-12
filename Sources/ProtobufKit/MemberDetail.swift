@@ -6,18 +6,18 @@
 //
 
 @attached(peer)
-public macro Detail(_ detail: IntDetail = .default) = #externalMacro(module: "ProtobufKitMacros", type: "ContentDetailMacro")
+public macro Detail(_ detail: IntegerDetail = .default) = #externalMacro(module: "ProtobufKitMacros", type: "ContentDetailMacro")
 
-@attached(peer)
-public macro Detail(_ detail: UIntDetail = .default) = #externalMacro(module: "ProtobufKitMacros", type: "ContentDetailMacro")
-
-public enum IntDetail {
+public enum IntegerDetail {
+    /// Default use
     case `default`
+    
+    /// Available when type is `Int32` and `Int64`
     case signed
+    
+    /// Available when type is `Int32` and `Int64`
     case signedFixed
-}
-
-public enum UIntDetail {
-    case `default`
+    
+    /// Available when type is `UInt32` and `UInt64`
     case fixed
 }

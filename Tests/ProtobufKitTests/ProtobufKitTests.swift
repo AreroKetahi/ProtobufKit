@@ -1,48 +1,64 @@
+//
+//  ProtobufKitTests.swift
+//
+//
+//  Created by Akivili Collindort on 2024/7/7.
+//
+
 import SwiftSyntax
+import ProtobufKitMacros
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
-#if canImport(ProtobufKitMacros)
-import ProtobufKitMacros
-
-let testMacros: [String: Macro.Type] = [
-    "stringify": StringifyMacro.self,
-]
-#endif
-
 final class ProtobufKitTests: XCTestCase {
-    func testMacro() throws {
-        #if canImport(ProtobufKitMacros)
+    func testDefault() throws {
         assertMacroExpansion(
             """
-            #stringify(a + b)
+            @ProtobufModel
+            struct LibraryCard {
+                var name: String
+                var age: UInt32
+                var isMember: Bool
+                var uuid: Data
+                var charge: Float
+                var borrowedBook: [String]
+                var bookNumber: [String: String]
+            }
             """,
             expandedSource: """
-            (a + b, "a + b")
+            struct LibraryCard {
+                var name: String
+                var age: UInt32
+                var isMember: Bool
+                var uuid: Data
+                var charge: Float
+                var borrowedBook: [String]
+                var bookNumber: [String: String]
+            }
+            
+            @_ProtobufModel private struct _$LibraryCard {
+                @Identifier(1)
+                var name: String
+                @Identifier(2)
+                @Detail(.default)
+                var age: UInt32
+                @Identifier(3)
+                var isMember: Bool
+                @Identifier(4)
+                var uuid: Data
+                @Identifier(5)
+                var charge: Float
+                @Identifier(6)
+                var borrowedBook: [String]
+                @Identifier(7)
+                var bookNumber: [String: String]
+            }
             """,
-            macros: testMacros
+            macros: [
+                "ProtobufModel": ProtobufModelMacro.self
+            ]
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
-    }
-
-    func testMacroWithStringLiteral() throws {
-        #if canImport(ProtobufKitMacros)
-        assertMacroExpansion(
-            #"""
-            #stringify("Hello, \(name)")
-            """#,
-            expandedSource: #"""
-            ("Hello, \(name)", #""Hello, \(name)""#)
-            """#,
-            macros: testMacros
-        )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 }

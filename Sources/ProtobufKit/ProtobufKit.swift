@@ -5,6 +5,7 @@
 //  Created by Akivili Collindort on 2024/7/7.
 //
 
+import Foundation
 import SwiftProtobuf
 
 // The comment below is the macro pre-planning

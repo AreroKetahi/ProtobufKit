@@ -7,5 +7,11 @@ import SwiftSyntaxMacros
 struct ProtobufKitPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         ProtobufModelMacro.self,
+        ContentDetailMacro.self,
+        NameMacro.self,
+        EmptyPeerMacro.self,
+        EmptyExpressionMacro.self,
+        GeneratePBMacro.self,
+        GenerationResultMacro.self,
     ]
 }
